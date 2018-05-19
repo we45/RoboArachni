@@ -1,47 +1,42 @@
 *** Settings ***
-Library  RoboArachni.py
+Library  /Users/abhaybhargav/Documents/Code/Python/RoboArachni/roboarachni/RoboArachni.py
 Library  Collections
-Library  Selenium2Library
+Library  REST  http://3a3186c7.ngrok.io  proxies={"http": "http://localhost:9090", "https": "http://localhost:9090"}
 
 
 *** Variables ***
-${PROXY_PORT}  9090
-${ARACHNI_PATH}  /home/user/Documents/Tools/arachni-1.5.1-0.5.12/bin/arachni_rest_server
-${TARGET}  http://example.com/
-${BASE_URL}  http://example.com/
-${LOGIN_URL}  http://example.com/login/
+${TARGET}  http://3a3186c7.ngrok.io
 
 *** Test Cases ***
 Initiate ARACHNI
-    start arachni restserver  ${ARACHNI_PATH}
+    start arachni docker
 
 Start Proxy
-    start arachni proxy  ${TARGET}  ${PROXY_PORT}
+    start arachni proxy  ${TARGET}
+    sleep  5
 
-Open App
-    [Tags]  phantomjs
-    ${service args}=    Create List    --proxy=127.0.0.1:${PROXY_PORT}
-    Create WebDriver  PhantomJS  service_args=${service args}
-    go to  ${LOGIN_URL}
+Authenticate to Web Service Arachni
+    &{res}=  POST  /login  {"username": "admin", "password": "admin123"}
+    Integer  response status  200
+    set suite variable  ${TOKEN}  ${res.headers["Authorization"]}
 
-Login to App
-    [Tags]  login
-    input text  username  user@user.com
-    input password  password  password
-    click button  id=submit
-    set browser implicit wait  10
-    location should be  ${BASE_URL}dashboard/
+Get Customer by ID
+    [Setup]  Set Headers  { "Authorization": "${TOKEN}" }
+    GET  /get/2
+    Integer  response status  200
 
+Post Fetch Customer
+    [Setup]  Set Headers  { "Authorization": "${TOKEN}" }
+    POST  /fetch/customer  { "id": 3 }
+    Integer  response status  200
 
-Visit Random Pages
-    [Tags]  visit
-    go to  ${BASE_URL}tests/
-    input text  search  something
-    click button  name=look
-    go to  ${BASE_URL}secure_tests/
+Search Customer by Username
+    [Setup]  Set Headers  { "Authorization": "${TOKEN}" }
+    POST  /search  { "search": "dleon" }
+    Integer  response status  200
 
 Initiate Scan
-    initiate scan  ${PROXY_PORT}
+    initiate scan
 
 Scanning
     get scan status
@@ -50,4 +45,4 @@ Get Arachni Results
     get results
 
 Kill Arachni
-    delete scan
+    stop arachni kill container
