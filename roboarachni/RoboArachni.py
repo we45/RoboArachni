@@ -1,15 +1,10 @@
 from robot.api import logger
 import requests
 import json
-# import os
 import sys
 import docker
-
-reload(sys)
-sys.setdefaultencoding('UTF8')
 import time
-# import subprocess
-# import psutil
+
 
 
 class RoboArachni(object):
@@ -22,17 +17,7 @@ class RoboArachni(object):
         self.proxy_port = proxy_port
         self.username = arachni_username
         self.password = arachni_pw
-        self.client = docker.from_env()
-
-    # def start_arachni_restserver(self, arachni_path):
-    #     try:
-    #         proc = subprocess.Popen(arachni_path.split(), stdout=open(os.devnull, 'w'), stderr=subprocess.STDOUT)
-    #         time.sleep(30)
-    #         self.process_id.append(proc.pid)
-    #     except BaseException as e:
-    #         exc_type, exc_value, exc_traceback = sys.exc_info()
-    #         logger.info('Error: {0} {1}'.format(e, exc_traceback.tb_lineno))
-
+        self.client = docker.from_env()   
 
     def start_arachni_docker(self):
 

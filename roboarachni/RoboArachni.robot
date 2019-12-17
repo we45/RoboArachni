@@ -1,11 +1,14 @@
 *** Settings ***
-Library  /Users/abhaybhargav/Documents/Code/Python/RoboArachni/roboarachni/RoboArachni.py
+Library  RoboArachni.py
 Library  Collections
-Library  REST  http://3a3186c7.ngrok.io  proxies={"http": "http://localhost:9090", "https": "http://localhost:9090"}
+Library  REST  http://6c14a3c7.ngrok.io  proxies={"http": "http://localhost:9090", "https": "http://localhost:9090"}
 
+
+# docker run -d -p 5050:5050 abhaybhargav/vul_flask
+# ngrok http 5050
 
 *** Variables ***
-${TARGET}  http://3a3186c7.ngrok.io
+${TARGET}  http://6c14a3c7.ngrok.io
 
 *** Test Cases ***
 Initiate ARACHNI
@@ -13,7 +16,7 @@ Initiate ARACHNI
 
 Start Proxy
     start arachni proxy  ${TARGET}
-    sleep  5
+    sleep  40
 
 Authenticate to Web Service Arachni
     &{res}=  POST  /login  {"username": "admin", "password": "admin123"}

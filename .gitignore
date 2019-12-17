@@ -1,3 +1,5 @@
 *.html
 *.xml
 roboarachni/arachni_report.json
+venv
+*.pyc
