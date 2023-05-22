@@ -1,7 +1,7 @@
 from setuptools import setup
 
 install_dependencies = (
-    'requests==2.22.0',
+    'requests==2.31.0',
     'robotframework==3.1.2',
     'docker==4.1.0',
 )
@@ -16,7 +16,7 @@ setup(
     author='Abhay Bhargav',
     author_email='Twitter: @abhaybhargav',
     install_requires = [
-    'requests==2.22.0', 'robotframework==3.1.2', 'docker==4.1.0',
+    'requests==2.31.0', 'robotframework==3.1.2', 'docker==4.1.0',
     ],
     description='Robot Framework Library for Arachni Scanner'
 )
